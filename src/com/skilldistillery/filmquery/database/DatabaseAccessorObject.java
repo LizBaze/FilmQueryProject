@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.skilldistillery.filmquery.entities.Actor;
 import com.skilldistillery.filmquery.entities.Film;
+import com.skilldistillery.filmquery.entities.InventoryItem;
 
 public class DatabaseAccessorObject implements DatabaseAccessor {
 	private static final String URL = "jdbc:mysql://localhost:3306/sdvid?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=US/Mountain";
@@ -191,6 +192,31 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			e.printStackTrace();
 		}
 		return category;
+	}
+
+	@Override
+	public List<InventoryItem> findInventoryItemByFilmId(int filmdId) {
+		List<InventoryItem> inventory = new ArrayList<>();
+		try {
+			Connection conn = DriverManager.getConnection(URL, user, pass);
+			String sql = "SELECT * FROM inventory_item WHERE film_id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, filmdId);
+			ResultSet rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				InventoryItem item = new InventoryItem();
+				item.setId(rs.getInt("id"));
+				item.setFilmId(rs.getInt("film_id"));
+				item.setStoreId(rs.getInt("store_id"));
+				item.setMediaCondition(rs.getString("media_condition"));
+				item.setLastUpdate(rs.getString("last_update"));
+				inventory.add(item);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return inventory;
 	}
 
 }

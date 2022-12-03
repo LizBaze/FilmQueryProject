@@ -11,6 +11,7 @@ import com.skilldistillery.filmquery.database.DatabaseAccessor;
 import com.skilldistillery.filmquery.database.DatabaseAccessorObject;
 import com.skilldistillery.filmquery.entities.Actor;
 import com.skilldistillery.filmquery.entities.Film;
+import com.skilldistillery.filmquery.entities.InventoryItem;
 
 public class FilmQueryApp {
 
@@ -42,9 +43,9 @@ public class FilmQueryApp {
 
 	private void startUserInterface(Scanner input) {
 
-		System.out.println("**** Main Menu ****");
 		boolean keepGoing = true;
 		do {
+			System.out.println("**** Main Menu ****");
 			printMenu();
 			int userChoice = 0;
 			try {
@@ -144,7 +145,8 @@ public class FilmQueryApp {
 		do {
 			try {
 				System.out.println("1) List all film details");
-				System.out.println("2) Main menu");
+				System.out.println("2) Show all matches in inventory");
+				System.out.println("3) Main menu");
 				
 				userInput = input.nextInt();
 				
@@ -154,6 +156,19 @@ public class FilmQueryApp {
 					fullDetailFilmPrinter(films);
 					break;
 				case 2:
+					int totalInInventory = 0;
+					for (Film film : films) {
+						totalInInventory = 0;
+						List<InventoryItem> inventory = db.findInventoryItemByFilmId(film.getId());
+						for (InventoryItem item : inventory) {
+							System.out.println(item);
+							totalInInventory++;
+						}
+						System.out.println("***************************************************************************************");
+					}
+					System.out.println("Total in Inventory: " + totalInInventory);
+					break;
+				case 3:
 					break;
 				default: 
 					validInput = false;

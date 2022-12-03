@@ -9,7 +9,9 @@ This project interfaces a SQL database with a Java codebase to allow users to lo
 
 Additionally, the films are stored and passed to a submenu allowing for the option to display all the database fields for any films matching the search criteria. 
 
-Added Category lookup utilizing the bridge table (film_category) for display along with the full film details
+The category now also displays along with the rest of the film details. This was accomplished using a second bridge table (film_category);
+
+The submenu allows user to display all matches currently in inventory along with relevant information such as the condition and the store where it is located. 
 
 ![image](https://user-images.githubusercontent.com/112978206/205415736-2b2c3392-118c-4487-b654-1aa7a843350b.png)
 
