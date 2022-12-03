@@ -1,7 +1,7 @@
 # FilmQueryProject
 
 # Description
-This project interfaces a SQL database with a Java codebase to allow users to look up films by ID or keyword search. Upon successful lookup, appropriate objects are created in the DatabaseAccessor for the film(s) and actor(s) matching the user's search parameters which are then fed back to the main app for relevant data to be printed to the screen.
+This project interfaces a SQL database with a Java codebase to allow users to look up films by ID or keyword search. Upon successful lookup, the program references tables in the database to construct objects for the film and all actors associated with it. The final output includes the film title, description, release year, rating, language, and cast. This data is extracted from three tables using bridges.
 
 
 # Lessons Learned
