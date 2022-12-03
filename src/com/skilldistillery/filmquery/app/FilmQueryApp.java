@@ -17,18 +17,18 @@ public class FilmQueryApp {
 
 	public static void main(String[] args) throws SQLException {
 		FilmQueryApp app = new FilmQueryApp();
-		app.test();
+//		app.test();
 		app.launch();
 	}
 
-	private void test() throws SQLException {
-		Film film = db.findFilmById(1);
-		Actor actor = db.findActorById(1);
-		List<Actor> actors = db.findActorsByFilmId(1);
-		System.out.println(film);
-		System.out.println(actor);
-		System.out.println(actors);
-	}
+//	private void test() throws SQLException {
+//		Film film = db.findFilmById(1);
+//		Actor actor = db.findActorById(1);
+//		List<Actor> actors = db.findActorsByFilmId(1);
+//		System.out.println(film);
+//		System.out.println(actor);
+//		System.out.println(actors);
+//	}
 
 	private void launch() {
 		Scanner input = new Scanner(System.in);
