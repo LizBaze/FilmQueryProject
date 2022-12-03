@@ -159,12 +159,13 @@ public class FilmQueryApp {
 					int totalInInventory = 0;
 					for (Film film : films) {
 						totalInInventory = 0;
-						List<InventoryItem> inventory = db.findInventoryItemByFilmId(film.getId());
+						List<InventoryItem> inventory = db.findInventoryItemByFilm(film);
 						for (InventoryItem item : inventory) {
 							System.out.println(item);
 							totalInInventory++;
 						}
-						System.out.println("***************************************************************************************");
+						System.out.println("*************************************************" + 
+											"**************************************");
 					}
 					System.out.println("Total in Inventory: " + totalInInventory);
 					break;

@@ -194,18 +194,20 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		return category;
 	}
 
-	@Override
-	public List<InventoryItem> findInventoryItemByFilmId(int filmdId) {
+	@Override 	// Accepting a Film object as parameter rather than filmID makes it 
+				// easier to add the film title to the InventoryItem object for readability
+	public List<InventoryItem> findInventoryItemByFilm(Film film) {
 		List<InventoryItem> inventory = new ArrayList<>();
 		try {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
-			String sql = "SELECT * FROM inventory_item WHERE film_id = ?";
+			String sql = "SELECT * FROM inventory_item JOIN film ON inventory_item.film_id = film.id WHERE film.title = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, filmdId);
+			stmt.setString(1, film.getTitle());
 			ResultSet rs = stmt.executeQuery();
 			
 			while(rs.next()) {
 				InventoryItem item = new InventoryItem();
+				item.setFilmTitle(film.getTitle());
 				item.setId(rs.getInt("id"));
 				item.setFilmId(rs.getInt("film_id"));
 				item.setStoreId(rs.getInt("store_id"));

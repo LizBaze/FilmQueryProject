@@ -7,6 +7,7 @@ public class InventoryItem {
 	private int storeId;
 	private String mediaCondition;
 	private String lastUpdate;
+	private String filmTitle;
 	//TODO add film name for readability purposes?
 	
 	public InventoryItem() {
@@ -54,8 +55,16 @@ public class InventoryItem {
 
 	@Override
 	public String toString() {
-		return "Film ID: " + filmId + ", Inventory ID:" + id + ", Store ID:" + storeId + ", Condition:"
-				+ mediaCondition + ", Last Update:" + lastUpdate + "]";
+		return "Title: " + filmTitle + ", Film ID: " + filmId + ", Inventory ID: " + id + ", \n\t Store ID: " + storeId + ", Condition: "
+				+ mediaCondition + ", Last Update: " + lastUpdate + "]";
+	}
+
+	public String getFilmTitle() {
+		return filmTitle;
+	}
+
+	public void setFilmTitle(String filmTitle) {
+		this.filmTitle = filmTitle;
 	}
 
 }

@@ -24,5 +24,5 @@ The submenu allows user to display all matches currently in inventory along with
 - SQL
 - Git
 
-##ERDiagram of the database used:
+## ERDiagram of the database used:
 ![image](https://user-images.githubusercontent.com/112978206/205415736-2b2c3392-118c-4487-b654-1aa7a843350b.png)
