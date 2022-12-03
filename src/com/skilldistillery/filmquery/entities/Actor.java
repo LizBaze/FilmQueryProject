@@ -50,7 +50,7 @@ public class Actor {
 
 	@Override
 	public String toString() {
-		return "Actor [id: " + id + ", Name: "  + firstName + " " + lastName + "]";
+		return "ID: " + id + ", Name: "  + firstName + " " + lastName;
 	}
 	
 	public List<Film> getFilms() {

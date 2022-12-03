@@ -36,10 +36,42 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				film.setActors(findActorsByFilmId(filmId));
 			}
 		} catch (SQLException e) {
-			System.out.println(e.getStackTrace());
+			e.printStackTrace();
 		}
 
 		return film;
+	}
+
+	public List<Film> findFilmByKeyword(String keyword) {
+		Film film = null;
+		List<Film> films = new ArrayList<>();
+
+		try {
+			String sql = "SELECT * FROM film WHERE title LIKE CONCAT('%' , ? , '%') "
+					+ " OR description LIKE CONCAT('%' , ? , '%')";
+			Connection conn = DriverManager.getConnection(URL, user, pass);
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, keyword);
+			stmt.setString(2, keyword);
+			
+
+			ResultSet rs = stmt.executeQuery();
+			
+			while (rs.next()) {
+				int filmId = rs.getInt("id");
+				film = new Film(filmId, rs.getString("title"), rs.getString("description"), rs.getShort("release_year"),
+						rs.getInt("language_id"), rs.getInt("rental_duration"), rs.getDouble("rental_rate"),
+						rs.getInt("length"), rs.getDouble("replacement_cost"), rs.getString("rating"),
+						rs.getString("special_features"));
+
+				film.setActors(findActorsByFilmId(filmId));
+				films.add(film);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return films;
 	}
 
 	public Actor findActorById(int actorId) {
@@ -61,7 +93,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			}
 			// ...
 		} catch (SQLException e) {
-			System.out.println(e.getStackTrace());
+			e.printStackTrace();
 		}
 		return actor;
 	}
@@ -116,11 +148,30 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				Actor actor = new Actor(rs.getInt("id"), rs.getString("first_name"), rs.getString("last_name"));
 				actors.add(actor);
 			}
+			conn.close();
 		} catch (SQLException e) {
-			System.out.println(e.getStackTrace());
+			e.printStackTrace();
 		}
-
 		return actors;
+	}
+	
+	public String findLanguageByFilm(Film film) {
+		String language = null;
+		try {
+		Connection conn = DriverManager.getConnection(URL, user, pass);
+		String sql = "SELECT name FROM language JOIN film ON language.id = film.language_id";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		ResultSet rs = stmt.executeQuery();
+		
+		if (rs.next()) {
+			language = rs.getString("name");
+		}
+		
+		conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return language;
 	}
 
 }
