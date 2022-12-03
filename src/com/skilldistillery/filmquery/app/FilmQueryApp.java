@@ -1,6 +1,7 @@
 package com.skilldistillery.filmquery.app;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.List;
@@ -33,6 +34,7 @@ public class FilmQueryApp {
 	private void launch() {
 		Scanner input = new Scanner(System.in);
 
+		System.out.println("Welcome to the sdvid database management system");
 		startUserInterface(input);
 
 		input.close();
@@ -40,8 +42,7 @@ public class FilmQueryApp {
 
 	private void startUserInterface(Scanner input) {
 
-		System.out.println("Welcome to the sdvid database management system");
-
+		System.out.println("**** Main Menu ****");
 		boolean keepGoing = true;
 		do {
 			printMenu();
@@ -51,28 +52,12 @@ public class FilmQueryApp {
 				input.nextLine();
 				switch (userChoice) {
 				case 1:
-					System.out.println("Enter the id to search");
-					Film filmById = db.findFilmById(input.nextInt());
-					input.nextLine();
-					if (filmById != null) {
-						filmPrinter(filmById);
-					} else {
-						System.out.println("No film found with that ID");
-					}
+					List<Film> filmsbyID = idSearch(input); 	// Store list of matching films for re-use in filmSearchSubMenu
+					filmSearchSubMenu(input, filmsbyID);
 					break;
 				case 2:
-					System.out.println("Enter your keyword:");
-					List<Film> films = db.findFilmByKeyword(input.nextLine());
-					int numFilmsFound = 0;
-					if (!films.isEmpty()) {
-						for (Film film : films) {
-							filmPrinter(film);
-							numFilmsFound++;
-						}
-						System.out.println("Total films found: " + numFilmsFound);
-					} else {
-						System.out.println("No films found");
-					}
+					List<Film> filmsByKeyWord = keywordSearch(input); // Store list of matching films for re-use in filmSearchSubMenu
+					filmSearchSubMenu(input, filmsByKeyWord);
 					break;
 				case 3:
 					System.out.println("Goodbye");
@@ -81,7 +66,7 @@ public class FilmQueryApp {
 				default:
 					System.out.println("Invalid entry");
 				}
-				
+
 			} catch (InputMismatchException e) {
 				System.out.println("Invalid selection, please try again");
 				input.nextLine();
@@ -110,9 +95,93 @@ public class FilmQueryApp {
 			actorsOutput.append(it.next());
 			if (it.hasNext()) {
 				actorsOutput.append(", ");
-			}
-		}
+			} // End of if statement
+		} // End of for loop
 		System.out.println(actorsOutput);
+	} // End of filmPrinter beginning line 86
+
+	// Allow user to input keyword, search films' 'title' and 'description' fields,
+	// call filmPrinter() for each, keep track of total films found and output that
+	// as well
+	private List<Film> keywordSearch(Scanner input) {
+		System.out.println("Enter your keyword:");
+		List<Film> films = db.findFilmByKeyword(input.nextLine());
+		int numFilmsFound = 0;
+		if (!films.isEmpty()) {
+			for (Film film : films) {
+				filmPrinter(film);
+				numFilmsFound++;
+			}
+			System.out.println("Total films found: " + numFilmsFound);
+		} else {
+			System.out.println("No films found");
+		}
+		return films;
 	}
 
-}
+	// Allow user to input film ID, search films table by ID,
+	// call filmPrinter to print the film
+	private List<Film> idSearch(Scanner input) {
+		System.out.println("Enter the id to search");
+		Film filmById = db.findFilmById(input.nextInt());
+		input.nextLine();
+		if (filmById != null) {
+			filmPrinter(filmById);
+		} else {
+			System.out.println("No film found with that ID");
+		}
+		List<Film> films = new ArrayList<>();
+		films.add(filmById);
+		return films;
+	}
+	
+		// Give the option to see all database fields for the list of films passed or return to the main menu
+	private void filmSearchSubMenu(Scanner input, List<Film> films) {
+		int userInput = 0;
+		
+		boolean validInput = true;
+
+		do {
+			try {
+				System.out.println("1) List all film details");
+				System.out.println("2) Main menu");
+				
+				userInput = input.nextInt();
+				
+				input.nextLine();
+				switch (userInput) {
+				case 1:
+					fullDetailFilmPrinter(films);
+					startUserInterface(input);
+					break;
+				case 2:
+					startUserInterface(input);
+					break;
+				default:
+					
+				}
+			} catch (InputMismatchException e) {
+				System.out.println("Invalid input, please try again");
+				input.nextLine();
+				validInput = false;
+			}
+		} while (! validInput);  //End of do while loop beginning line 141
+	} // End of filmSearchSubMenu beginning line 136
+	
+	
+	// Print all of the database fields for a list of films
+	private void fullDetailFilmPrinter(List<Film> films) {
+		for (Film film : films) {
+
+			StringBuilder filmDetails = new StringBuilder();
+			filmDetails.append("ID: " + film.getId() + ", Title: " + film.getTitle() + ", Released: "
+					+ film.getReleaseYear() + ", Language ID: " + film.getLanguageId() + ", Rental Duration: "
+					+ film.getRentalDuration() + ", Rental Rate: " + film.getRentalRate() + ", Length: "
+					+ film.getLength() + ", Replacement Cost: " + film.getReplacementCost() + ", Rating: "
+					+ film.getRating() + ", Special Features: " + film.getFeatures());
+			System.out.println(filmDetails);
+		} //End of foreach loop
+	} // End of fullDetailFilmPrinter
+	
+	
+} // End of program

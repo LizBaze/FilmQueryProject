@@ -7,7 +7,7 @@ This project interfaces a SQL database with a Java codebase to allow users to lo
 
 # Lessons Learned
 - I am getting much more comfortable deciding which class any given method should go in to best maintain proper encapsulation of a project. Understanding your basic project layout is paramount. 
-- Similar to the above, looking at my code and deciding which parts can be moved to separate methods for increased readability is also getting much easier.
+- Similar to the above, looking at my code and deciding which parts can be moved to separate methods for increased readability is also getting much easier. 
 - It is very important to proofread and test your SQL queries. Writing them in the command line first before inserting them into Java seems like a good way to go.
 
 # Technologies Used
