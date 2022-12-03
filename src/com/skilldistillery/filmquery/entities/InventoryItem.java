@@ -7,6 +7,7 @@ public class InventoryItem {
 	private int storeId;
 	private String mediaCondition;
 	private String lastUpdate;
+	//TODO add film name for readability purposes?
 	
 	public InventoryItem() {
 	}

@@ -13,8 +13,6 @@ The category now also displays along with the rest of the film details. This was
 
 The submenu allows user to display all matches currently in inventory along with relevant information such as the condition and the store where it is located. 
 
-![image](https://user-images.githubusercontent.com/112978206/205415736-2b2c3392-118c-4487-b654-1aa7a843350b.png)
-
 # Lessons Learned
 - I am getting much more comfortable deciding which class any given method should go in to best maintain proper encapsulation of a project. Understanding your basic project layout is paramount. 
 - Similar to the above, looking at my code and deciding which parts can be moved to separate methods for increased readability is also getting much easier. 
@@ -25,3 +23,6 @@ The submenu allows user to display all matches currently in inventory along with
 - Java
 - SQL
 - Git
+
+##ERDiagram of the database used:
+![image](https://user-images.githubusercontent.com/112978206/205415736-2b2c3392-118c-4487-b654-1aa7a843350b.png)
