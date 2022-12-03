@@ -1,7 +1,13 @@
 # FilmQueryProject
 
 # Description
-This project interfaces a SQL database with a Java codebase to allow users to look up films by ID or keyword search. Upon successful lookup, the program references tables in the database to construct objects for the film and all actors associated with it. The final output includes the film title, description, release year, rating, language, and cast. This data is extracted from three tables with one bridge table (film_actor) also being utilized.
+### Main Functionality
+
+This project interfaces a SQL database with a Java codebase to allow users to look up films by ID or keyword search. Upon successful lookup, the program references tables in the database to construct objects for the film and all actors associated with it. The final output includes the film title, description, release year, rating, language, and cast. This data is extracted from three tables with one bridge table (film_actor) also being utilized.  
+
+### Completed Stretch Goals
+
+Additionally, the films are stored and passed to a submenu allowing for the option to display all the database fields for any films matching the search criteria. 
 
 ![image](https://user-images.githubusercontent.com/112978206/205415736-2b2c3392-118c-4487-b654-1aa7a843350b.png)
 
