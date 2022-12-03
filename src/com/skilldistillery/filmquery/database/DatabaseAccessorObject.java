@@ -174,4 +174,23 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		return language;
 	}
 
+	@Override
+	public String findCategoryByFilmId(int filmId) {
+		String category = null;
+		try {
+			Connection conn = DriverManager.getConnection(URL, user, pass);
+			String sql = "SELECT name FROM category JOIN film_category ON category.id = film_category.category_id "
+							+ "JOIN film ON film.id = film_category.film_id WHERE film.id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, filmId);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				category = rs.getString("name");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return category;
+	}
+
 }

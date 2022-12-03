@@ -152,12 +152,13 @@ public class FilmQueryApp {
 				switch (userInput) {
 				case 1:
 					fullDetailFilmPrinter(films);
-					startUserInterface(input);
 					break;
 				case 2:
-					startUserInterface(input);
 					break;
-				default:
+				default: 
+					validInput = false;
+					System.out.println("Invalid selection");
+					break;
 					
 				}
 			} catch (InputMismatchException e) {
@@ -177,8 +178,8 @@ public class FilmQueryApp {
 			filmDetails.append("ID: " + film.getId() + ", Title: " + film.getTitle() + ", Released: "
 					+ film.getReleaseYear() + ", Language ID: " + film.getLanguageId() + ", Rental Duration: "
 					+ film.getRentalDuration() + ", Rental Rate: " + film.getRentalRate() + ", Length: "
-					+ film.getLength() + ", Replacement Cost: " + film.getReplacementCost() + ", Rating: "
-					+ film.getRating() + ", Special Features: " + film.getFeatures());
+					+ film.getLength() + ", Replacement Cost: " + film.getReplacementCost() + ", \n Rating: "
+					+ film.getRating() + ", Special Features: " + film.getFeatures() + ", Category: " + db.findCategoryByFilmId(film.getId()));
 			System.out.println(filmDetails);
 		} //End of foreach loop
 	} // End of fullDetailFilmPrinter
