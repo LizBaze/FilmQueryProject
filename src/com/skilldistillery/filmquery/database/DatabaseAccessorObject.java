@@ -45,7 +45,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 	public List<Film> findFilmByKeyword(String keyword) {
 		Film film = null;
-		List<Film> films = new ArrayList<>();
+		List<Film> films = null;
 
 		try {
 			// CONCAT('%' , ? , '%') is how I chose to escape single quotes within the query
@@ -58,18 +58,20 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			stmt.setString(2, keyword);
 
 			ResultSet rs = stmt.executeQuery();
-
-			while (rs.next()) {
+			
+			if (rs.next()) {  // If there is a match, initialize films, add first film
+				films = new ArrayList<>();
 				int filmId = rs.getInt("id");
-				film = new Film(rs.getInt("id"), rs.getString("title"), rs.getString("description"),
-						rs.getShort("release_year"), rs.getInt("language_id"), rs.getInt("rental_duration"),
-						rs.getDouble("rental_rate"), rs.getInt("length"), rs.getDouble("replacement_cost"),
-						rs.getString("rating"), rs.getString("special_features"));
-
+				film = filmGenerator(rs);
 				film.setActors(findActorsByFilmId(filmId));
-				if (film != null) {
-					films.add(film);
-				}
+				films.add(film);
+			}
+			
+			while (rs.next()) {  // add the rest of the films
+				int filmId = rs.getInt("id");
+				film = filmGenerator(rs);
+				film.setActors(findActorsByFilmId(filmId));
+				films.add(film);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -139,7 +141,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 	@Override
 	public List<Actor> findActorsByFilmId(int filmId) {
-		List<Actor> actors = new ArrayList<>();
+		List<Actor> actors = null;
 
 		try {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
@@ -148,7 +150,14 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, filmId);
 			ResultSet rs = stmt.executeQuery();
-			while (rs.next()) {
+
+			if (rs.next()) { // if there are matches, initialize actors ArrayList and add first match
+								// This ensures the list is null when no matches are found
+				actors = new ArrayList<>();
+				Actor actor = new Actor(rs.getInt("id"), rs.getString("first_name"), rs.getString("last_name"));
+				actors.add(actor);
+			}
+			while (rs.next()) { // add the rest of the matches
 				Actor actor = new Actor(rs.getInt("id"), rs.getString("first_name"), rs.getString("last_name"));
 				actors.add(actor);
 			}
@@ -200,7 +209,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 	@Override // Accepting a Film object as parameter rather than filmID makes it
 				// easier to add the film title to the InventoryItem object for readability
 	public List<InventoryItem> findInventoryItemByFilm(Film film) {
-		List<InventoryItem> inventory = new ArrayList<>();
+		List<InventoryItem> inventory = null;
 		try {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
 			String sql = "SELECT * FROM inventory_item JOIN film ON inventory_item.film_id = film.id WHERE film.title = ?";
@@ -208,14 +217,13 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			stmt.setString(1, film.getTitle());
 			ResultSet rs = stmt.executeQuery();
 
-			while (rs.next()) {
-				InventoryItem item = new InventoryItem();
-				item.setFilmTitle(film.getTitle());
-				item.setId(rs.getInt("id"));
-				item.setFilmId(rs.getInt("film_id"));
-				item.setStoreId(rs.getInt("store_id"));
-				item.setMediaCondition(rs.getString("media_condition"));
-				item.setLastUpdate(rs.getString("last_update"));
+			if (rs.next()) { // If there is a match, initialize list, generate first item
+				inventory = new ArrayList<>();
+				InventoryItem item = inventoryItemGenerator(rs, film);
+				inventory.add(item);
+			}
+			while (rs.next()) { // generate the rest of the items
+				InventoryItem item = inventoryItemGenerator(rs, film);
 				inventory.add(item);
 			}
 		} catch (SQLException e) {
@@ -224,4 +232,33 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		return inventory;
 	}
 
+	
+	private InventoryItem inventoryItemGenerator(ResultSet rs, Film film) {
+		InventoryItem item = null;
+		try {
+			item = new InventoryItem();
+			item.setFilmTitle(film.getTitle());
+			item.setId(rs.getInt("id"));
+			item.setFilmId(rs.getInt("film_id"));
+			item.setStoreId(rs.getInt("store_id"));
+			item.setMediaCondition(rs.getString("media_condition"));
+			item.setLastUpdate(rs.getString("last_update"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return item;
+	}
+	
+	private Film filmGenerator(ResultSet rs) {
+		Film film = null;
+		try {
+			film = new Film(rs.getInt("id"), rs.getString("title"), rs.getString("description"),
+					rs.getShort("release_year"), rs.getInt("language_id"), rs.getInt("rental_duration"),
+					rs.getDouble("rental_rate"), rs.getInt("length"), rs.getDouble("replacement_cost"),
+					rs.getString("rating"), rs.getString("special_features"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return film;
+	}
 }

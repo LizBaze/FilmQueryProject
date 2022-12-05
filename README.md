@@ -11,11 +11,11 @@ Additionally, the films are stored and passed to a submenu allowing for the opti
 
 The category now also displays along with the rest of the film details. This was accomplished using a second bridge table (film_category);
 
-The submenu allows user to display all matches currently in inventory along with relevant information such as the condition and the store where it is located. 
+The submenu allows the user to display all matches currently in inventory along with relevant information such as the condition and the store where it is located. 
 
 # Lessons Learned
 
-- ORM, DAO
+- Data Access Object, Object-Relational Mapping
 - I am getting much more comfortable deciding which class any given method should go in to best maintain proper encapsulation of a project. Understanding your basic project layout is paramount. 
 - Similar to the above, looking at my code and deciding which parts can be moved to separate methods for increased readability is also getting much easier. 
 - It is very important to proofread and test your SQL queries. Writing them in the command line first before inserting them into Java seems like a good way to go.

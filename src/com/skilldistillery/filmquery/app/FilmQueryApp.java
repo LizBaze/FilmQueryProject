@@ -55,7 +55,7 @@ public class FilmQueryApp {
 				case 1:
 					List<Film> filmsbyID = idSearch(input); // Store list of matching films for re-use in
 															// filmSearchSubMenu
-					if (!filmsbyID.isEmpty()) {
+					if (filmsbyID != null) {
 						filmSearchSubMenu(input, filmsbyID);
 					}
 					break;
@@ -137,8 +137,9 @@ public class FilmQueryApp {
 		} else {
 			System.out.println("No film found with that ID");
 		}
-		List<Film> films = new ArrayList<>();
+		List<Film> films = null;
 		if (filmById != null) {
+			films = new ArrayList<>();
 			films.add(filmById);
 		}
 		return films;
