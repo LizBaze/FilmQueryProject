@@ -59,8 +59,15 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 			ResultSet rs = stmt.executeQuery();
 			
+	// Deprecated in favor of counter variable //
+//			if (rs.next()) {
+//				films = new ArrayList<>();
+//				int filmId = rs.getInt("id");
+//				film = filmGenerator(rs);
+//				film.setActors(findActorsByFilmId(filmId));
+//				films.add(film);
+//			}
 			int counter = 0;
-			
 			while (rs.next()) {  
 				if (counter == 0) {
 					films = new ArrayList<>();
@@ -150,8 +157,6 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			ResultSet rs = stmt.executeQuery();
 			
 			int counter = 0;
-
-			
 			while (rs.next()) { 
 				if (counter == 0 ) {
 					actors = new ArrayList<>();

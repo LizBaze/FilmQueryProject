@@ -62,7 +62,8 @@ public class FilmQueryApp {
 				case 2:
 					List<Film> filmsByKeyWord = keywordSearch(input); // Store list of matching films for re-use in
 																		// filmSearchSubMenu
-					if (!filmsByKeyWord.isEmpty()) {
+					// don't do .isEmpty()
+					if (filmsByKeyWord != null) {
 						filmSearchSubMenu(input, filmsByKeyWord);
 					}
 					break;
@@ -96,12 +97,15 @@ public class FilmQueryApp {
 		StringBuilder actorsOutput = new StringBuilder("\t Actors: ");
 
 		List<Actor> actors = db.findActorsByFilmId(film.getId());
-		Iterator<Actor> it = actors.iterator();
+		Iterator<Actor> it = null;
+		if (actors != null) {
+			it = actors.iterator();
 
-		for (int i = 0; i < actors.size(); i++) {
-			actorsOutput.append(it.next());
-			if (it.hasNext()) {
-				actorsOutput.append(" | ");
+			for (int i = 0; i < actors.size(); i++) {
+				actorsOutput.append(it.next());
+				if (it.hasNext()) {
+					actorsOutput.append(" | ");
+				}
 			} // End of if statement
 		} // End of for loop
 		System.out.println(actorsOutput);
@@ -114,7 +118,7 @@ public class FilmQueryApp {
 		System.out.println("Enter your keyword:");
 		List<Film> films = db.findFilmByKeyword(input.nextLine());
 		int numFilmsFound = 0;
-		if (!films.isEmpty()) {
+		if (films != null) {
 			for (Film film : films) {
 				filmPrinter(film);
 				numFilmsFound++;
