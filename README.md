@@ -14,14 +14,18 @@ The category now also displays along with the rest of the film details. This was
 The submenu allows user to display all matches currently in inventory along with relevant information such as the condition and the store where it is located. 
 
 # Lessons Learned
+
+- ORM, DAO
 - I am getting much more comfortable deciding which class any given method should go in to best maintain proper encapsulation of a project. Understanding your basic project layout is paramount. 
 - Similar to the above, looking at my code and deciding which parts can be moved to separate methods for increased readability is also getting much easier. 
 - It is very important to proofread and test your SQL queries. Writing them in the command line first before inserting them into Java seems like a good way to go.
-- Automating the most-used SQL queries for a given database seems very powerful. I'm excited to be putting together pieces of knowledge that have remained very disconnected to me for most of my experience with them, and looking forward to developing a deeper understanding of the capabilities this grants
+- Automating the most-used SQL queries for a given database seems very powerful. I'm excited to be putting together pieces of knowledge that have remained very disconnected to me for most of my experience with them, and looking forward to developing a deeper understanding of the capabilities they have when working together
 
 # Technologies Used
 - Java
 - SQL
+- Maven
+- JDBC
 - Git
 
 ## ERDiagram of the database used:

@@ -53,11 +53,13 @@ public class FilmQueryApp {
 				input.nextLine();
 				switch (userChoice) {
 				case 1:
-					List<Film> filmsbyID = idSearch(input); 	// Store list of matching films for re-use in filmSearchSubMenu
+					List<Film> filmsbyID = idSearch(input); // Store list of matching films for re-use in
+															// filmSearchSubMenu
 					filmSearchSubMenu(input, filmsbyID);
 					break;
 				case 2:
-					List<Film> filmsByKeyWord = keywordSearch(input); // Store list of matching films for re-use in filmSearchSubMenu
+					List<Film> filmsByKeyWord = keywordSearch(input); // Store list of matching films for re-use in
+																		// filmSearchSubMenu
 					filmSearchSubMenu(input, filmsByKeyWord);
 					break;
 				case 3:
@@ -95,7 +97,7 @@ public class FilmQueryApp {
 		for (int i = 0; i < actors.size(); i++) {
 			actorsOutput.append(it.next());
 			if (it.hasNext()) {
-				actorsOutput.append(", ");
+				actorsOutput.append(" | ");
 			} // End of if statement
 		} // End of for loop
 		System.out.println(actorsOutput);
@@ -135,11 +137,12 @@ public class FilmQueryApp {
 		films.add(filmById);
 		return films;
 	}
-	
-		// Give the option to see all database fields for the list of films passed or return to the main menu
+
+	// Give the option to see all database fields for the list of films passed or
+	// return to the main menu
 	private void filmSearchSubMenu(Scanner input, List<Film> films) {
 		int userInput = 0;
-		
+
 		boolean validInput = true;
 
 		do {
@@ -147,45 +150,35 @@ public class FilmQueryApp {
 				System.out.println("1) List all film details");
 				System.out.println("2) Show all matches in inventory");
 				System.out.println("3) Main menu");
-				
+
 				userInput = input.nextInt();
-				
+
 				input.nextLine();
 				switch (userInput) {
 				case 1:
 					fullDetailFilmPrinter(films);
 					break;
 				case 2:
-					int totalInInventory = 0;
 					for (Film film : films) {
-						totalInInventory = 0;
-						List<InventoryItem> inventory = db.findInventoryItemByFilm(film);
-						for (InventoryItem item : inventory) {
-							System.out.println(item);
-							totalInInventory++;
-						}
-						System.out.println("*************************************************" + 
-											"**************************************");
+						inventoryItemPrinter(film);
 					}
-					System.out.println("Total in Inventory: " + totalInInventory);
 					break;
 				case 3:
 					break;
-				default: 
+				default:
 					validInput = false;
 					System.out.println("Invalid selection");
 					break;
-					
+
 				}
 			} catch (InputMismatchException e) {
 				System.out.println("Invalid input, please try again");
 				input.nextLine();
 				validInput = false;
 			}
-		} while (! validInput);  //End of do while loop beginning line 141
+		} while (!validInput); // End of do while loop beginning line 141
 	} // End of filmSearchSubMenu beginning line 136
-	
-	
+
 	// Print all of the database fields for a list of films
 	private void fullDetailFilmPrinter(List<Film> films) {
 		for (Film film : films) {
@@ -195,10 +188,25 @@ public class FilmQueryApp {
 					+ film.getReleaseYear() + ", Language ID: " + film.getLanguageId() + ", Rental Duration: "
 					+ film.getRentalDuration() + ", Rental Rate: " + film.getRentalRate() + ", Length: "
 					+ film.getLength() + ", Replacement Cost: " + film.getReplacementCost() + ", \n Rating: "
-					+ film.getRating() + ", Special Features: " + film.getFeatures() + ", Category: " + db.findCategoryByFilmId(film.getId()));
+					+ film.getRating() + ", Special Features: " + film.getFeatures() + ", Category: "
+					+ db.findCategoryByFilmId(film.getId()));
 			System.out.println(filmDetails);
-		} //End of foreach loop
+		} // End of foreach loop
 	} // End of fullDetailFilmPrinter
-	
-	
+
+	private void inventoryItemPrinter(Film film) {
+		int totalInInventory = 0;
+
+		totalInInventory = 0;
+		List<InventoryItem> inventory = db.findInventoryItemByFilm(film);
+		for (InventoryItem item : inventory) {
+			System.out.println(item);
+			totalInInventory++;
+		}
+		System.out.println(
+				"*************************************************" + "**************************************");
+
+		System.out.println("Total in Inventory: " + totalInInventory);
+	}
+
 } // End of program
