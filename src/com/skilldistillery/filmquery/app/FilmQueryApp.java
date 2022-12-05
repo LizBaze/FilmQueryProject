@@ -55,12 +55,16 @@ public class FilmQueryApp {
 				case 1:
 					List<Film> filmsbyID = idSearch(input); // Store list of matching films for re-use in
 															// filmSearchSubMenu
-					filmSearchSubMenu(input, filmsbyID);
+					if (!filmsbyID.isEmpty()) {
+						filmSearchSubMenu(input, filmsbyID);
+					}
 					break;
 				case 2:
 					List<Film> filmsByKeyWord = keywordSearch(input); // Store list of matching films for re-use in
 																		// filmSearchSubMenu
-					filmSearchSubMenu(input, filmsByKeyWord);
+					if (!filmsByKeyWord.isEmpty()) {
+						filmSearchSubMenu(input, filmsByKeyWord);
+					}
 					break;
 				case 3:
 					System.out.println("Goodbye");
@@ -134,7 +138,9 @@ public class FilmQueryApp {
 			System.out.println("No film found with that ID");
 		}
 		List<Film> films = new ArrayList<>();
-		films.add(filmById);
+		if (filmById != null) {
+			films.add(filmById);
+		}
 		return films;
 	}
 

@@ -48,25 +48,28 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		List<Film> films = new ArrayList<>();
 
 		try {
+			// CONCAT('%' , ? , '%') is how I chose to escape single quotes within the query
+			// The query outputs "WHERE title LIKE %?%" where ? is the user's input
 			String sql = "SELECT * FROM film WHERE title LIKE CONCAT('%' , ? , '%') "
 					+ " OR description LIKE CONCAT('%' , ? , '%')";
 			Connection conn = DriverManager.getConnection(URL, user, pass);
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, keyword);
 			stmt.setString(2, keyword);
-			
 
 			ResultSet rs = stmt.executeQuery();
-			
+
 			while (rs.next()) {
 				int filmId = rs.getInt("id");
-				film = new Film(filmId, rs.getString("title"), rs.getString("description"), rs.getShort("release_year"),
-						rs.getInt("language_id"), rs.getInt("rental_duration"), rs.getDouble("rental_rate"),
-						rs.getInt("length"), rs.getDouble("replacement_cost"), rs.getString("rating"),
-						rs.getString("special_features"));
+				film = new Film(rs.getInt("id"), rs.getString("title"), rs.getString("description"),
+						rs.getShort("release_year"), rs.getInt("language_id"), rs.getInt("rental_duration"),
+						rs.getDouble("rental_rate"), rs.getInt("length"), rs.getDouble("replacement_cost"),
+						rs.getString("rating"), rs.getString("special_features"));
 
 				film.setActors(findActorsByFilmId(filmId));
-				films.add(film);
+				if (film != null) {
+					films.add(film);
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -155,20 +158,20 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		}
 		return actors;
 	}
-	
+
 	public String findLanguageByFilm(Film film) {
 		String language = null;
 		try {
-		Connection conn = DriverManager.getConnection(URL, user, pass);
-		String sql = "SELECT name FROM language JOIN film ON language.id = film.language_id";
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		ResultSet rs = stmt.executeQuery();
-		
-		if (rs.next()) {
-			language = rs.getString("name");
-		}
-		
-		conn.close();
+			Connection conn = DriverManager.getConnection(URL, user, pass);
+			String sql = "SELECT name FROM language JOIN film ON language.id = film.language_id";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				language = rs.getString("name");
+			}
+
+			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -181,7 +184,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		try {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
 			String sql = "SELECT name FROM category JOIN film_category ON category.id = film_category.category_id "
-							+ "JOIN film ON film.id = film_category.film_id WHERE film.id = ?";
+					+ "JOIN film ON film.id = film_category.film_id WHERE film.id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, filmId);
 			ResultSet rs = stmt.executeQuery();
@@ -194,7 +197,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		return category;
 	}
 
-	@Override 	// Accepting a Film object as parameter rather than filmID makes it 
+	@Override // Accepting a Film object as parameter rather than filmID makes it
 				// easier to add the film title to the InventoryItem object for readability
 	public List<InventoryItem> findInventoryItemByFilm(Film film) {
 		List<InventoryItem> inventory = new ArrayList<>();
@@ -204,8 +207,8 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, film.getTitle());
 			ResultSet rs = stmt.executeQuery();
-			
-			while(rs.next()) {
+
+			while (rs.next()) {
 				InventoryItem item = new InventoryItem();
 				item.setFilmTitle(film.getTitle());
 				item.setId(rs.getInt("id"));
