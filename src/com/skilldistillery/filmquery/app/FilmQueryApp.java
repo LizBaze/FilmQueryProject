@@ -71,11 +71,11 @@ public class FilmQueryApp {
 					keepGoing = false;
 					break;
 				default:
-					System.out.println("Invalid entry");
+					System.out.println("Invalid selection");
 				}
 
 			} catch (InputMismatchException e) {
-				System.out.println("Invalid selection, please try again");
+				System.out.println("Invalid input, please try again");
 				input.nextLine();
 			}
 
