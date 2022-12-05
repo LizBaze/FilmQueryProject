@@ -59,15 +59,13 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 			ResultSet rs = stmt.executeQuery();
 			
-			if (rs.next()) {  // If there is a match, initialize films, add first film
-				films = new ArrayList<>();
-				int filmId = rs.getInt("id");
-				film = filmGenerator(rs);
-				film.setActors(findActorsByFilmId(filmId));
-				films.add(film);
-			}
+			int counter = 0;
 			
-			while (rs.next()) {  // add the rest of the films
+			while (rs.next()) {  
+				if (counter == 0) {
+					films = new ArrayList<>();
+					counter++;
+				}
 				int filmId = rs.getInt("id");
 				film = filmGenerator(rs);
 				film.setActors(findActorsByFilmId(filmId));
@@ -150,14 +148,15 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, filmId);
 			ResultSet rs = stmt.executeQuery();
+			
+			int counter = 0;
 
-			if (rs.next()) { // if there are matches, initialize actors ArrayList and add first match
-								// This ensures the list is null when no matches are found
-				actors = new ArrayList<>();
-				Actor actor = new Actor(rs.getInt("id"), rs.getString("first_name"), rs.getString("last_name"));
-				actors.add(actor);
-			}
-			while (rs.next()) { // add the rest of the matches
+			
+			while (rs.next()) { 
+				if (counter == 0 ) {
+					actors = new ArrayList<>();
+					counter++;
+				}
 				Actor actor = new Actor(rs.getInt("id"), rs.getString("first_name"), rs.getString("last_name"));
 				actors.add(actor);
 			}
@@ -217,12 +216,13 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			stmt.setString(1, film.getTitle());
 			ResultSet rs = stmt.executeQuery();
 
-			if (rs.next()) { // If there is a match, initialize list, generate first item
-				inventory = new ArrayList<>();
-				InventoryItem item = inventoryItemGenerator(rs, film);
-				inventory.add(item);
-			}
-			while (rs.next()) { // generate the rest of the items
+			int counter = 0;
+			
+			while (rs.next()) {
+				if (counter ==0) { 
+					inventory = new ArrayList<>();
+					counter++;
+				}
 				InventoryItem item = inventoryItemGenerator(rs, film);
 				inventory.add(item);
 			}
